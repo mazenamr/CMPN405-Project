@@ -18,28 +18,33 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
 Define_Module(Coordinator);
 
 void Coordinator::initialize()
 {
-    std::ifstream myfile(fileName);
+    ifstream fin(fileName);
+    vector<string> inputStrings(par("n").intValue()*3);
 
-    for (auto&& i: A)
+    for (auto&& i: inputStrings)
     {
-        int tempNodeId, tempStart;
-        std::string nodeFileName, start;
-
-        myfile >> tempId >> nodeFileName >> start;
-        bool sender = std::strcmp("start", start) == 0 ? true : false;
-        if (sender)
-        {
-            myfile >> tempStart;
-            instructions.push_back(new instruction(tempId, nodeFileName, sender, tempStart));
-        }
-        else
-            instructions.push_back(new instruction(tempId, nodeFileName, sender, -1));
+        fin >> i;
     }
 
+    vector<Instruction> instructions(par("n").intValue());
+    instructions[0] = new instruction(stoi(inputStrings[0]), inputStrings[1], false, -1);
+
+    if (inputStrings[2] == "start")
+    {
+        instructions[0].isStart = true;
+        instructions[0].startTime = stoi(inputStrings[3]);
+        instructions[1] = new instruction(stoi(inputStrings[4]), inputStrings[5], false, -1);
+    }
+    else
+    {
+        instructions[1] = new instruction(stoi(inputStrings[2]), inputStrings[3], true, stoi(inputStrings[5]));
+    }
 }
 
 void Coordinator::handleMessage(cMessage *msg)

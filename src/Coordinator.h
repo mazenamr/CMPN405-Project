@@ -37,8 +37,8 @@ class Coordinator : public cSimpleModule
     {
         int nodeId;
         std::string fileName;
-        bool isSender = false;
-        int sendTime = -1;
+        bool isStart = false;
+        int startTime = -1;
 
         Instruction()
         {
@@ -48,8 +48,8 @@ class Coordinator : public cSimpleModule
         {
             this->nodeId = id;
             this->fileName = file;
-            this->isSender = sender;
-            this->sendTime = time;
+            this->isStart = sender;
+            this->startTime = time;
         }
     };
 };
