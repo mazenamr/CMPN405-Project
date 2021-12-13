@@ -39,6 +39,18 @@ class Coordinator : public cSimpleModule
         std::string fileName;
         bool isSender = false;
         int sendTime = -1;
+
+        Instruction()
+        {
+        }
+
+        Instruction(int id, std::string file, bool sender, int time)
+        {
+            this->nodeId = id;
+            this->fileName = file;
+            this->isSender = sender;
+            this->sendTime = time;
+        }
     };
 };
 

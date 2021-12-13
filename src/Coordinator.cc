@@ -30,14 +30,14 @@ void Coordinator::initialize()
         std::string nodeFileName, start;
 
         myfile >> tempId >> nodeFileName >> start;
-        if (std::strcmp("start", start) == 0)
+        bool sender = std::strcmp("start", start) == 0 ? true : false;
+        if (sender)
         {
             myfile >> tempStart;
+            instructions.push_back(new instruction(tempId, nodeFileName, sender, tempStart));
         }
         else
-        {
-
-        }
+            instructions.push_back(new instruction(tempId, nodeFileName, sender, -1));
     }
 
 }
