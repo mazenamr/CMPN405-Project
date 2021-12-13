@@ -18,6 +18,7 @@
 
 #include <omnetpp.h>
 #include <vector>
+#include "CoordinatorMessage_m.h"
 
 using namespace omnetpp;
 
@@ -30,28 +31,30 @@ class Coordinator : public cSimpleModule
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
   public:
-    const std::string fileName = "coordinator.txt";
+    const std::string fileName = "inputs/coordinator.txt";
+    struct Instruction
+       {
+           int nodeId;
+           std::string fileName;
+           bool isStart = false;
+           int startTime = -1;
+
+           Instruction()
+           {
+           }
+
+           Instruction(int id, std::string file, bool sender, int time)
+           {
+               this->nodeId = id;
+               this->fileName = file;
+               this->isStart = sender;
+               this->startTime = time;
+           }
+       };
+
     std::vector<Instruction> instructions;
 
-    struct Instruction
-    {
-        int nodeId;
-        std::string fileName;
-        bool isStart = false;
-        int startTime = -1;
 
-        Instruction()
-        {
-        }
-
-        Instruction(int id, std::string file, bool sender, int time)
-        {
-            this->nodeId = id;
-            this->fileName = file;
-            this->isStart = sender;
-            this->startTime = time;
-        }
-    };
 };
 
 #endif

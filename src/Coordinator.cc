@@ -18,33 +18,52 @@
 #include <vector>
 #include <string>
 
-using namespace std;
 
 Define_Module(Coordinator);
 
 void Coordinator::initialize()
 {
-    ifstream fin(fileName);
-    vector<string> inputStrings(par("n").intValue()*3);
+    std::ifstream fin(fileName);
+    std::vector<std::string> inputStrings(par("n").intValue()*3);
 
     for (auto&& i: inputStrings)
     {
         fin >> i;
     }
 
-    vector<Instruction> instructions(par("n").intValue());
-    instructions[0] = new instruction(stoi(inputStrings[0]), inputStrings[1], false, -1);
-
+    std::vector<Instruction> instructions(par("n").intValue());
+    instructions[0].nodeId = stoi(inputStrings[0]);
+    instructions[0].fileName = inputStrings[1];
+    instructions[0].isStart = false;
+    instructions[0].startTime = -1;
     if (inputStrings[2] == "start")
     {
         instructions[0].isStart = true;
         instructions[0].startTime = stoi(inputStrings[3]);
-        instructions[1] = new instruction(stoi(inputStrings[4]), inputStrings[5], false, -1);
+        instructions[1].nodeId = stoi(inputStrings[4]);
+        instructions[1].fileName = inputStrings[5];
+        instructions[1].isStart = false;
+        instructions[1].startTime = -1;
     }
     else
     {
-        instructions[1] = new instruction(stoi(inputStrings[2]), inputStrings[3], true, stoi(inputStrings[5]));
+        instructions[1].nodeId = stoi(inputStrings[2]);
+        instructions[1].fileName = inputStrings[3];
+        instructions[1].isStart = true;
+        instructions[1].startTime = stoi(inputStrings[5]);
     }
+
+    CoordinatorMessage_Base *nodeZeroMessage = new CoordinatorMessage_Base("nodeZeroMessage");
+    nodeZeroMessage->setConfigFileName(instructions[0].fileName.c_str());
+    nodeZeroMessage->setIsStart(instructions[0].isStart);
+    nodeZeroMessage->setStartTime(instructions[0].startTime);
+    send(nodeZeroMessage, "outs", instructions[0].nodeId);
+
+    CoordinatorMessage_Base *nodeOneMessage = new CoordinatorMessage_Base("nodeOneMessage");
+    nodeOneMessage->setConfigFileName(instructions[1].fileName.c_str());
+    nodeOneMessage->setIsStart(instructions[1].isStart);
+    nodeOneMessage->setStartTime(instructions[1].startTime);
+    send(nodeOneMessage, "outs", instructions[1].nodeId);
 }
 
 void Coordinator::handleMessage(cMessage *msg)
