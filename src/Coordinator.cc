@@ -14,12 +14,32 @@
 // 
 
 #include "Coordinator.h"
+#include <fstream>
+#include <vector>
+#include <string>
 
 Define_Module(Coordinator);
 
 void Coordinator::initialize()
 {
-    // TODO - Generated method body
+    std::ifstream myfile(fileName);
+
+    for (auto&& i: A)
+    {
+        int tempNodeId, tempStart;
+        std::string nodeFileName, start;
+
+        myfile >> tempId >> nodeFileName >> start;
+        if (std::strcmp("start", start) == 0)
+        {
+            myfile >> tempStart;
+        }
+        else
+        {
+
+        }
+    }
+
 }
 
 void Coordinator::handleMessage(cMessage *msg)

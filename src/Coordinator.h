@@ -17,6 +17,7 @@
 #define __CMPN405_PROJECT_COORDINATOR_H_
 
 #include <omnetpp.h>
+#include <vector>
 
 using namespace omnetpp;
 
@@ -28,6 +29,17 @@ class Coordinator : public cSimpleModule
   protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+  public:
+    const std::string fileName = "coordinator.txt";
+    std::vector<Instruction> instructions;
+
+    struct Instruction
+    {
+        int nodeId;
+        std::string fileName;
+        bool isSender = false;
+        int sendTime = -1;
+    };
 };
 
 #endif
