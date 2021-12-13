@@ -1,21 +1,25 @@
-package section1;
-
+package cmpn405_project;
 @license(LGPL);
 //
 // TODO documentation
 //
+
+import ned.IdealChannel;
+
 network Network
 {
-    @display("bgb=326,159");
+    parameters:
+        int n = default(6);
     submodules:
-        sender: Sender {
-            @display("p=138,38;i=block/source");
-        }
-        receiver: Receiver {
-            @display("p=138,116;i=block/buffer2");
-        }
+        nodes[n]: Node;
+        coordinator: Coordinator;
     connections:
-        sender.out --> receiver.in;
-        receiver.out --> sender.in;
+        for i=0..sizeof(nodes)-1, if i%2 == 0
+        {
+            nodes[i].out --> IdealChannel --> nodes[i+1].in;
+            nodes[i+1].out --> IdealChannel --> nodes[i].in;
+            nodes[i].coord <-- IdealChannel <-- coordinator.outs++;
+            nodes[i+1].coord <-- IdealChannel <-- coordinator.outs++;            
+        }
 }
 

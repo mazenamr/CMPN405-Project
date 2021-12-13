@@ -13,22 +13,21 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __BITMANUPLATIONS_RECEIVER_H_
-#define __BITMANUPLATIONS_RECEIVER_H_
+#ifndef __CMPN405_PROJECT_COORDINATOR_H_
+#define __CMPN405_PROJECT_COORDINATOR_H_
 
 #include <omnetpp.h>
-#include <bitset>
-#include <vector>
+
 using namespace omnetpp;
 
 /**
  * TODO - Generated class
  */
-class Receiver : public cSimpleModule
+class Coordinator : public cSimpleModule
 {
   protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+    virtual void initialize() override;
+    virtual void handleMessage(cMessage *msg) override;
 };
 
 #endif

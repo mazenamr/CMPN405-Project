@@ -13,14 +13,15 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package section1;
+package cmpn405_project;
 
 //
 // TODO auto-generated module
 //
-simple Receiver
+simple Coordinator
 {
-            gates:
-        input in;
-        output out;
+    parameters:
+        int n = default(6);
+    gates:
+        output outs[];
 }

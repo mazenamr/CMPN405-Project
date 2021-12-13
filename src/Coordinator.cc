@@ -13,22 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __BITMANUPLATIONS_SENDER_H_
-#define __BITMANUPLATIONS_SENDER_H_
+#include "Coordinator.h"
 
-#include <omnetpp.h>
-#include <bitset>
-#include <vector>
-using namespace omnetpp;
+Define_Module(Coordinator);
 
-/**
- * TODO - Generated class
- */
-class Sender : public cSimpleModule
+void Coordinator::initialize()
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
+    // TODO - Generated method body
+}
 
-#endif
+void Coordinator::handleMessage(cMessage *msg)
+{
+    // TODO - Generated method body
+}

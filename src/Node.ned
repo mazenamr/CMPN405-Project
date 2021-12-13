@@ -13,7 +13,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package section1;
+package cmpn405_project;
 
 //
 // TODO auto-generated module
@@ -21,14 +21,7 @@ package section1;
 simple Node
 {
     gates:
+        input coord;
         input in;
         output out;
-    
 }
-
-
-
-
-
-
-
