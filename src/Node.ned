@@ -20,6 +20,8 @@ package cmpn405_project;
 //
 simple Node
 {
+    parameters:
+    	double delay = default(0.2);
     gates:
         input coord;
         input in;
