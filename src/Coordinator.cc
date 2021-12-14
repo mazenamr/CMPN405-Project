@@ -14,6 +14,7 @@
 // 
 
 #include "Coordinator.h"
+#include "CoordinatorMessage_m.h"
 #include <fstream>
 #include <vector>
 #include <string>
@@ -53,17 +54,15 @@ void Coordinator::initialize()
         instructions[1].startTime = stoi(inputStrings[5]);
     }
 
-    CoordinatorMessage_Base *nodeZeroMessage = new CoordinatorMessage_Base("nodeZeroMessage");
-    nodeZeroMessage->setConfigFileName(instructions[0].fileName.c_str());
-    nodeZeroMessage->setIsStart(instructions[0].isStart);
-    nodeZeroMessage->setStartTime(instructions[0].startTime);
-    send(nodeZeroMessage, "outs", instructions[0].nodeId);
 
-    CoordinatorMessage_Base *nodeOneMessage = new CoordinatorMessage_Base("nodeOneMessage");
-    nodeOneMessage->setConfigFileName(instructions[1].fileName.c_str());
-    nodeOneMessage->setIsStart(instructions[1].isStart);
-    nodeOneMessage->setStartTime(instructions[1].startTime);
-    send(nodeOneMessage, "outs", instructions[1].nodeId);
+    for (int i = 0; i < 2; ++i)
+    {
+        CoordinatorMessage_Base *node = new CoordinatorMessage_Base("node");
+        node->setConfigFileName(instructions[i].fileName.c_str());
+        node->setIsStart(instructions[i].isStart);
+        node->setStartTime(instructions[i].isStart ? instructions[i].startTime : 0);
+        sendDelayed(node, instructions[i].startTime - simTime(), "outs", instructions[i].nodeId);
+    }
 }
 
 void Coordinator::handleMessage(cMessage *msg)
