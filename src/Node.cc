@@ -34,7 +34,7 @@ void Node::handleMessage(cMessage *msg)
     if (strcmp(msg->getName(), "coordinator") == 0)
     {
         CoordinatorMessage_Base *cmsg = check_and_cast<CoordinatorMessage_Base*>(msg);
-        char path[] = "input/";
+        char path[] = "../inputs/";
         std::strcat(path, cmsg->getConfigFileName());
         std::ifstream fin(path);
         std::vector<std::string> inputStrings;
