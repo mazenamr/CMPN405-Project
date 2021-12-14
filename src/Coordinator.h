@@ -31,13 +31,13 @@ class Coordinator : public cSimpleModule
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
   public:
-    const std::string fileName = "inputs/coordinator.txt";
+    const std::string fileName = "../inputs/coordinator.txt";
     struct Instruction
        {
            int nodeId;
            std::string fileName;
            bool isStart = false;
-           int startTime = -1;
+           int startTime = 0;
 
            Instruction()
            {

@@ -18,6 +18,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <iostream>
 
 
 Define_Module(Coordinator);
@@ -36,7 +37,7 @@ void Coordinator::initialize()
     instructions[0].nodeId = stoi(inputStrings[0]);
     instructions[0].fileName = inputStrings[1];
     instructions[0].isStart = false;
-    instructions[0].startTime = -1;
+    instructions[0].startTime = 0;
     if (inputStrings[2] == "start")
     {
         instructions[0].isStart = true;
@@ -44,7 +45,7 @@ void Coordinator::initialize()
         instructions[1].nodeId = stoi(inputStrings[4]);
         instructions[1].fileName = inputStrings[5];
         instructions[1].isStart = false;
-        instructions[1].startTime = -1;
+        instructions[1].startTime = 0;
     }
     else
     {
@@ -61,6 +62,7 @@ void Coordinator::initialize()
         node->setConfigFileName(instructions[i].fileName.c_str());
         node->setIsStart(instructions[i].isStart);
         node->setStartTime(instructions[i].isStart ? instructions[i].startTime : 0);
+        std::cout << node->getName() << " "<< node->getConfigFileName() << " " << node->getIsStart() << " " << node->getStartTime() << std::endl;
         sendDelayed(node, instructions[i].startTime - simTime(), "outs", instructions[i].nodeId);
     }
 }
