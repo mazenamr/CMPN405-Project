@@ -37,6 +37,13 @@ void Node::sendMessage(std::string messageName)
     NodeMessage_Base *nmsg = new NodeMessage_Base(messageName.c_str());
     if (!messages[index].loss)
     {
+        if (messages[index].modification)
+        {
+            int randomCharacterIndex = uniform(0, messages[index].content.size());
+            int randomBitIndex = uniform(0, 7);
+            messages[index].content[randomCharacterIndex] = messages[index].content[randomCharacterIndex] ^ (1 << randomBitIndex);
+        }
+
         double delay = messages[index].delay ? par("delay").doubleValue() : 0;
         nmsg->setPayload(messages[index].content.c_str());
         messageHeader header;
