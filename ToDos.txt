@@ -3,4 +3,4 @@
 3) Only the starter node receives it's message from the coordinator & starts sending (Muhab - DONE)
 4) Implement the send/receive logic between the nodes properly (Muhab - DONE)
 5) Have each node print it's own text log file (Muhab)
-6) Bit modification logic (Muhab - In Progress)
+6) Bit modification logic (Muhab - Done)
