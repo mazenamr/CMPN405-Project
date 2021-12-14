@@ -29,6 +29,47 @@ void Node::initialize()
 
 }
 
+void Node::sendMessage(std::string messageName)
+{
+    if (index >= messages.size())
+        return;
+
+    NodeMessage_Base *nmsg = new NodeMessage_Base(messageName.c_str());
+    if (!messages[index].loss)
+    {
+        double delay = messages[index].delay ? par("delay").doubleValue() : 0;
+        nmsg->setPayload(messages[index].content.c_str());
+        messageHeader header;
+        header.messageId = index;
+        header.sendingTime = simTime().raw();
+        nmsg->setHeader(header);
+
+        if (messages[index].duplicated)
+            sendDelayed(nmsg->dup(), 0.01 + delay, "out");
+
+        // normal send
+        sendDelayed(nmsg->dup(), delay, "out");
+    }
+    std::cout << messages[index].modification << messages[index].loss
+            << messages[index].duplicated << messages[index].delay
+            << " " << messages[index].content << std::endl;
+    index++;
+}
+
+void Node::byteStuffing()
+{
+    for(int i = 0; i < messages.size(); ++i)
+    {
+        for(int j = 0; j < messages[i].content.size(); ++j)
+        {
+            if(messages[i].content[j] == '$' || messages[i].content[j] == '/')
+            {
+                messages[i].content.insert(j, "/");
+                j++;
+            }
+        }
+    }
+}
 
 void Node::handleMessage(cMessage *msg)
 {
@@ -37,6 +78,7 @@ void Node::handleMessage(cMessage *msg)
     {
         CoordinatorMessage_Base *cmsg = check_and_cast<CoordinatorMessage_Base*>(msg);
         char path[] = "../inputs/";
+        bool isStart = cmsg->getIsStart();
         std::strcat(path, cmsg->getConfigFileName());
         std::ifstream fin(path);
         std::vector<std::string> inputStrings;
@@ -56,55 +98,35 @@ void Node::handleMessage(cMessage *msg)
             {
                 message += (inputStrings[i] + " ");
                 ++i;
+
                 if (i == inputStrings.size())
                     break;
             }
+            message.pop_back();
             messages.push_back(Message(bits, message));
             if (i != inputStrings.size())
                 bits = inputStrings[i];
         }
-    }
-    // TO DO: BYTE STUFFING
-    for(int i = 0; i < messages.size(); ++i)
-    {
-        for(int j = 0; j < messages[i].content.size(); ++j)
-        {
-            if(messages[i].content[j] == '$' || messages[i].content[j] == '/')
-            {
-                messages[i].content.insert(j, "/");
-                j++;
-            }
-        }
+
+        byteStuffing();
+
+        if(isStart)
+            sendMessage("starter");
+
+        return;
     }
 
-    // CRC checksum bytes
-    for (int i = 0; i < messages.size(); ++i)
+    if (strcmp(msg->getName(), "starter") == 0)
     {
-        NodeMessage_Base *nmsg = new NodeMessage_Base("node1");
-        nmsg->setPayload(messages[i].content.c_str());
-        messageHeader header;
-        header.messageId = i;
-        //header.sendingTime = simTime();
-        nmsg->setHeader(header);
+        NodeMessage_Base *receivedMsg = check_and_cast<NodeMessage_Base*>(msg);
+        // Error detection and/or correction happen here.
+        std::cout << "Received: " << receivedMsg->getPayload() << std::endl;
+        NodeMessage_Base *nmsg = new NodeMessage_Base(index % 2 == 0 ? "NACK" : "ACK");
         send(nmsg, "out");
-        /*
-        if (!messages[i].loss)
-        {
-            send(nmsg, "out");
-
-            if (messages[i].duplicated)
-            sendDelayed(nmsg, 0.01, "out");
-
-            if (messages[i].delay)
-            sendDelayed(nmsg, par("delay").doubleValue(), "out");
-
-
-        }
-        */
-        std::cout << messages[i].modification << messages[i].loss << messages[i].duplicated << messages[i].delay << " " << messages[i].content << std::endl;
-
-
+        index++;
     }
+    else
+        sendMessage("starter");
 
 }
 

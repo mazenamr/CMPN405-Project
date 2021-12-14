@@ -52,6 +52,9 @@ class Node : public cSimpleModule
     };
 
     std::vector<Message> messages;
+    int index = 0;
+    void sendMessage(std::string messageName);
+    void byteStuffing();
 };
 
 #endif
