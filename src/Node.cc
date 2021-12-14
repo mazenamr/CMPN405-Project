@@ -29,6 +29,7 @@ void Node::initialize()
 
 }
 
+
 void Node::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
@@ -64,6 +65,17 @@ void Node::handleMessage(cMessage *msg)
         }
     }
     // TO DO: BYTE STUFFING
+    for(int i = 0; i< messages.size(); i++)
+    {
+        for(int j = 0; j < messages[i].content.size(); j++)
+        {
+            if(messages[i].content[j] == '$' || messages[i].content[j] == '/' )
+            {
+                messages[i].content.insert(j, "/");
+            }
+        }
+    }
+
     // CRC checksum bytes
     for (int i = 0; i < messages.size(); ++i)
     {
