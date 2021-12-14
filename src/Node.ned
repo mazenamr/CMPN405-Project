@@ -22,6 +22,7 @@ simple Node
 {
     parameters:
     	double delay = default(0.2);
+    	double timer = default(1);
     gates:
         input coord;
         input in;
