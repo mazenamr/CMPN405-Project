@@ -65,13 +65,14 @@ void Node::handleMessage(cMessage *msg)
         }
     }
     // TO DO: BYTE STUFFING
-    for(int i = 0; i< messages.size(); i++)
+    for(int i = 0; i < messages.size(); ++i)
     {
-        for(int j = 0; j < messages[i].content.size(); j++)
+        for(int j = 0; j < messages[i].content.size(); ++j)
         {
-            if(messages[i].content[j] == '$' || messages[i].content[j] == '/' )
+            if(messages[i].content[j] == '$' || messages[i].content[j] == '/')
             {
                 messages[i].content.insert(j, "/");
+                j++;
             }
         }
     }
@@ -85,15 +86,24 @@ void Node::handleMessage(cMessage *msg)
         header.messageId = i;
         //header.sendingTime = simTime();
         nmsg->setHeader(header);
-
         send(nmsg, "out");
+        /*
+        if (!messages[i].loss)
+        {
+            send(nmsg, "out");
 
-        std::cout << messages[i].modification << messages[i].loss << messages[i].duplicated << messages[i].delay << " " << messages[i].content << std::endl;
-        /*if (messages[i].duplicated)
+            if (messages[i].duplicated)
             sendDelayed(nmsg, 0.01, "out");
 
-        if (messages[i].delay)
-            sendDelayed(nmsg, par("delay").doubleValue(), "out");*/
+            if (messages[i].delay)
+            sendDelayed(nmsg, par("delay").doubleValue(), "out");
+
+
+        }
+        */
+        std::cout << messages[i].modification << messages[i].loss << messages[i].duplicated << messages[i].delay << " " << messages[i].content << std::endl;
+
+
     }
 
 }
