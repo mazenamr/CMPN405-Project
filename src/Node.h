@@ -17,7 +17,7 @@
 #define __SECTION1_NODE_H_
 
 #include <omnetpp.h>
-#include <bitset>
+#include <vector>
 using namespace omnetpp;
 
 /**
@@ -28,6 +28,30 @@ class Node : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+  public:
+    struct Message
+    {
+      bool modification;
+      bool loss;
+      bool duplication;
+      bool delay;
+      std::string content;
+
+      Message()
+      {
+      }
+
+      Message(std::string bits, std::string message)
+      {
+        modification = bits[0] == '0' ? false : true;
+        loss = bits[1] == '0' ? false : true;
+        duplication = bits[2] == '0' ? false : true;
+        delay = bits[3] == '0' ? false : true;
+        content = message;
+      }
+    };
+
+    std::vector<Message> messages;
 };
 
 #endif
