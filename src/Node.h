@@ -33,7 +33,7 @@ class Node : public cSimpleModule
     {
       bool modification;
       bool loss;
-      bool duplication;
+      bool duplicated;
       bool delay;
       std::string content;
 
@@ -45,7 +45,7 @@ class Node : public cSimpleModule
       {
         modification = bits[0] == '0' ? false : true;
         loss = bits[1] == '0' ? false : true;
-        duplication = bits[2] == '0' ? false : true;
+        duplicated = bits[2] == '0' ? false : true;
         delay = bits[3] == '0' ? false : true;
         content = message;
       }
