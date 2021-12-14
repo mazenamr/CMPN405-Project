@@ -43,18 +43,23 @@ class Node : public cSimpleModule
 
       Message(std::string bits, std::string message)
       {
-        modification = bits[0] == '0' ? false : true;
-        loss = bits[1] == '0' ? false : true;
-        duplicated = bits[2] == '0' ? false : true;
-        delay = bits[3] == '0' ? false : true;
+        modification = bits[0] == '1';
+        loss = bits[1] == '1';
+        duplicated = bits[2] == '1';
+        delay = bits[3] == '1';
         content = message;
       }
     };
 
     std::vector<Message> messages;
+    std::string outputPath = "../outputs/pair01.txt";
     int index = 0;
+    int countTransmissions = 0;
+    int correctTransmissions = 0;
+    int sequenceNumber = 0;
     void sendMessage(std::string messageName);
     void byteStuffing();
+    char CRC(std::string, int generator);
 };
 
 #endif

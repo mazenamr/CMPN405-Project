@@ -20,6 +20,9 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <cmath>
+
+#define GENERATOR 0b100000111
 
 Define_Module(Node);
 
@@ -29,14 +32,46 @@ void Node::initialize()
 
 }
 
+char Node::CRC(std::string message, int generator)
+{
+    int size = (int)std::log2(generator) + 1;
+    int remainder = 0;
+    for (int i = 0; i < message.length(); i++)
+    {
+        remainder = (remainder) ^ (message[i]);
+        remainder = (remainder << 1);
+        if ((remainder >> (size - 1)) >= 1)
+            remainder ^= generator;
+    }
+    return (char)remainder;
+}
+
 void Node::sendMessage(std::string messageName)
 {
-    if (index >= messages.size())
+    std::ofstream log;
+    log.open(outputPath, std::ios::app);
+
+    if (index == messages.size())
+    {
+        double totalTransmissionTime = simTime().dbl();
+        log << " ----------------------------------------\n";
+        log << " - " << getName() << "[" << getIndex() << "]" << " end of input file\n";
+        log << " - " << "total transmission time = " << totalTransmissionTime << "\n";
+        log << " - " << "total number of transmissions = " << countTransmissions << "\n";
+        log << " - " << "the network throughput = " << (double)correctTransmissions / totalTransmissionTime << "\n";
         return;
+    }
+
+
+    countTransmissions++;
+    if (!messages[index].modification && !messages[index].loss)
+        correctTransmissions++;
 
     NodeMessage_Base *nmsg = new NodeMessage_Base(messageName.c_str());
+    nmsg->setTrailer(CRC(messages[index].content, GENERATOR));
     if (!messages[index].loss)
     {
+        // modify bit block
         if (messages[index].modification)
         {
             int randomCharacterIndex = uniform(0, messages[index].content.size());
@@ -44,22 +79,32 @@ void Node::sendMessage(std::string messageName)
             messages[index].content[randomCharacterIndex] = messages[index].content[randomCharacterIndex] ^ (1 << randomBitIndex);
         }
 
-        double delay = messages[index].delay ? par("delay").doubleValue() : 0;
+        double delay = messages[index].delay ? par("delay").doubleValue() : 0.0;
         nmsg->setPayload(messages[index].content.c_str());
         messageHeader header;
         header.messageId = index;
-        header.sendingTime = simTime().raw();
+        header.sendingTime = simTime().dbl();
         nmsg->setHeader(header);
 
         if (messages[index].duplicated)
+        {
+            countTransmissions++;
             sendDelayed(nmsg->dup(), 0.01 + delay, "out");
+        }
 
         // normal send
         sendDelayed(nmsg->dup(), delay, "out");
+
+        log << " - " << getName() << "[" << getIndex() << "]" << " sends message with id = " << nmsg->getHeader().messageId
+                << " and content = " << nmsg->getPayload() << " at t = " << simTime().dbl() + delay << "s" << (messages[index].modification ? " with modification\n" : "\n");
     }
-    std::cout << messages[index].modification << messages[index].loss
-            << messages[index].duplicated << messages[index].delay
-            << " " << messages[index].content << std::endl;
+    else
+    {
+        scheduleAt(simTime() + par("timer").doubleValue() , new cMessage(""));
+    }
+
+    log.close();
+    cancelAndDelete(nmsg);
     index++;
 }
 
@@ -75,6 +120,8 @@ void Node::byteStuffing()
                 j++;
             }
         }
+        messages[i].content.insert(0, "$");
+        messages[i].content.insert(messages[i].content.size(), "$");
     }
 }
 
@@ -118,22 +165,63 @@ void Node::handleMessage(cMessage *msg)
         byteStuffing();
 
         if(isStart)
+        {
+            std::ofstream myFile(outputPath);
+            myFile.close();
             sendMessage("starter");
+        }
 
+        cancelAndDelete(msg);
         return;
     }
 
     if (strcmp(msg->getName(), "starter") == 0)
     {
+        std::ofstream log;
+        log.open(outputPath, std::ios::app);
+
         NodeMessage_Base *receivedMsg = check_and_cast<NodeMessage_Base*>(msg);
         // Error detection and/or correction happen here.
-        std::cout << "Received: " << receivedMsg->getPayload() << std::endl;
-        NodeMessage_Base *nmsg = new NodeMessage_Base(index % 2 == 0 ? "NACK" : "ACK");
-        send(nmsg, "out");
-        index++;
+        if (receivedMsg->getHeader().messageId < sequenceNumber)
+        {
+            log << " - " << getName() << "[" << getIndex() << "]" << " drops message with id = " << receivedMsg->getHeader().messageId << "\n";
+        }
+        else
+        {
+            std::cout << "Received: " << receivedMsg->getPayload() << std::endl;
+            std::string crc = std::string(receivedMsg->getPayload()) + receivedMsg->getTrailer();
+            bool error = ((int)CRC(crc, GENERATOR) != 0);
+            log << " - " << getName() << "[" << getIndex() << "]" << " received message with id = " << receivedMsg->getHeader().messageId
+                    << " and content = " << receivedMsg->getPayload() << " at t = " << simTime().dbl() << "s" << (error ? " with modification, " : " ")
+                    << "and piggybacking " << (error ? "NACK" : "ACK") << " number " << (error ? NACK : ACK) << "\n";
+
+            NodeMessage_Base *nmsg = new NodeMessage_Base(error ? "NACK" : "ACK");
+            nmsg->setPiggybacking(error ? NACK : ACK);
+            nmsg->setPiggybackingId(error ? NACK : ACK);
+            nmsg->setPayload(error ? "NACK" : "ACK");
+            messageHeader header;
+            header.messageId = index;
+            header.sendingTime = simTime().dbl();
+            nmsg->setHeader(header);
+            nmsg->setTrailer(CRC(error ? "NACK" : "ACK", GENERATOR));
+            sendDelayed(nmsg, 0.2, "out");
+            index++;
+            sequenceNumber++;
+        }
+        log.close();
     }
     else
+    {
+        if (msg->isSelfMessage())
+        {
+            std::ofstream log;
+            log.open(outputPath, std::ios::app);
+            log << " - " << getName() << "[" << getIndex() << "]" << " timeout for message id = " << index << " at t = " << simTime().dbl() << "s\n";
+            log.close();
+        }
         sendMessage("starter");
+    }
+    cancelAndDelete(msg);
 
 }
 
