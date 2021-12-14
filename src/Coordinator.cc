@@ -58,7 +58,7 @@ void Coordinator::initialize()
 
     for (int i = 0; i < 2; ++i)
     {
-        CoordinatorMessage_Base *node = new CoordinatorMessage_Base("node");
+        CoordinatorMessage_Base *node = new CoordinatorMessage_Base("coordinator");
         node->setConfigFileName(instructions[i].fileName.c_str());
         node->setIsStart(instructions[i].isStart);
         node->setStartTime(instructions[i].isStart ? instructions[i].startTime : 0);
