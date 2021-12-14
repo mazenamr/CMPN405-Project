@@ -1,0 +1,7 @@
+Assumptions made in phase 1:
+
+1) We assumed a "correct message" count would be the count of ACK messages we would get from the receiver's end (meaning delayed messages would count as "correct" and duplicate messages would too, but only once. So 0000 or 0001 or 0010 or 0011 all count towards the correctMessages counter).
+
+2) We counted the number of correct messages at the sender's end using the assigned 4 bits as we have no way to determine when the sender is finished from the receiver's side.
+
+3) We defined a struct for the piggyback which contains both an ENUM of either ACK or NACK, and it's ID would be 0 for NACK & 1 for ACK.
