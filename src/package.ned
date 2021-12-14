@@ -19,7 +19,7 @@ network Network
             nodes[i].out --> IdealChannel --> nodes[i+1].in;
             nodes[i+1].out --> IdealChannel --> nodes[i].in;
             nodes[i].coord <-- IdealChannel <-- coordinator.outs++;
-            nodes[i+1].coord <-- IdealChannel <-- coordinator.outs++;            
+            nodes[i+1].coord <-- IdealChannel <-- coordinator.outs++;
         }
 }
 
