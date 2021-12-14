@@ -1,6 +1,6 @@
 1) CRC Checksum algorithm (Mazen)
 2) Byte Stuffing (Gadallah - DONE)
-3) Only the starter node receives it's message from the coordinator & starts sending
-4) Implement the send/receive logic between the nodes properly (Muhab)
+3) Only the starter node receives it's message from the coordinator & starts sending (Muhab - DONE)
+4) Implement the send/receive logic between the nodes properly (Muhab - DONE)
 5) Have each node print it's own text log file (Muhab)
-6) Bit modification logic (Muhab)
+6) Bit modification logic (Muhab - In Progress)
