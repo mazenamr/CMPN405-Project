@@ -54,6 +54,11 @@ void Node::sendMessage(std::string messageName)
     if (index == messages.size())
     {
         double totalTransmissionTime = simTime().dbl();
+        std::cout << " ----------------------------------------\n";
+        std::cout << " - " << getName() << "[" << getIndex() << "]" << " end of input file\n";
+        std::cout << " - " << "total transmission time = " << totalTransmissionTime << "\n";
+        std::cout << " - " << "total number of transmissions = " << countTransmissions << "\n";
+        std::cout << " - " << "the network throughput = " << (double)correctTransmissions / totalTransmissionTime << "\n";
         log << " ----------------------------------------\n";
         log << " - " << getName() << "[" << getIndex() << "]" << " end of input file\n";
         log << " - " << "total transmission time = " << totalTransmissionTime << "\n";
@@ -95,6 +100,8 @@ void Node::sendMessage(std::string messageName)
         // normal send
         sendDelayed(nmsg->dup(), delay, "out");
 
+        std::cout << " - " << getName() << "[" << getIndex() << "]" << " sends message with id = " << nmsg->getHeader().messageId
+                << " and content = " << nmsg->getPayload() << " at t = " << simTime().dbl() + delay << "s" << (messages[index].modification ? " with modification\n" : "\n");
         log << " - " << getName() << "[" << getIndex() << "]" << " sends message with id = " << nmsg->getHeader().messageId
                 << " and content = " << nmsg->getPayload() << " at t = " << simTime().dbl() + delay << "s" << (messages[index].modification ? " with modification\n" : "\n");
     }
@@ -184,13 +191,16 @@ void Node::handleMessage(cMessage *msg)
         // Error detection and/or correction happen here.
         if (receivedMsg->getHeader().messageId < sequenceNumber)
         {
+            std::cout << " - " << getName() << "[" << getIndex() << "]" << " drops message with id = " << receivedMsg->getHeader().messageId << "\n";
             log << " - " << getName() << "[" << getIndex() << "]" << " drops message with id = " << receivedMsg->getHeader().messageId << "\n";
         }
         else
         {
-            std::cout << "Received: " << receivedMsg->getPayload() << std::endl;
             std::string crc = std::string(receivedMsg->getPayload()) + receivedMsg->getTrailer();
             bool error = ((int)CRC(crc, GENERATOR) != 0);
+            std::cout << " - " << getName() << "[" << getIndex() << "]" << " received message with id = " << receivedMsg->getHeader().messageId
+                                << " and content = " << receivedMsg->getPayload() << " at t = " << simTime().dbl() << "s" << (error ? " with modification, " : " ")
+                                << "and piggybacking " << (error ? "NACK" : "ACK") << " number " << (error ? NACK : ACK) << "\n";
             log << " - " << getName() << "[" << getIndex() << "]" << " received message with id = " << receivedMsg->getHeader().messageId
                     << " and content = " << receivedMsg->getPayload() << " at t = " << simTime().dbl() << "s" << (error ? " with modification, " : " ")
                     << "and piggybacking " << (error ? "NACK" : "ACK") << " number " << (error ? NACK : ACK) << "\n";
@@ -216,6 +226,7 @@ void Node::handleMessage(cMessage *msg)
         {
             std::ofstream log;
             log.open(outputPath, std::ios::app);
+            std::cout << " - " << getName() << "[" << getIndex() << "]" << " timeout for message id = " << index << " at t = " << simTime().dbl() << "s\n";
             log << " - " << getName() << "[" << getIndex() << "]" << " timeout for message id = " << index << " at t = " << simTime().dbl() << "s\n";
             log.close();
         }
