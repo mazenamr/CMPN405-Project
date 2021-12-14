@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
 Define_Module(Node);
 
@@ -45,12 +46,12 @@ void Node::handleMessage(cMessage *msg)
             inputStrings.push_back(temp);
         }
 
-        for (int i = 0; i < inputStrings.size(); ++i)
+        std::string bits = inputStrings[0];
+        for (int i = 1; i < inputStrings.size(); ++i)
         {
 
-            std::string bits = inputStrings[i];
             std::string message = "";
-            while (inputStrings[i][0] != '0' || inputStrings[i][0] != '1')
+            while (inputStrings[i][0] != '0' && inputStrings[i][0] != '1')
             {
                 message += (inputStrings[i] + " ");
                 ++i;
@@ -58,14 +59,29 @@ void Node::handleMessage(cMessage *msg)
                     break;
             }
             messages.push_back(Message(bits, message));
-            --i;
+            if (i != inputStrings.size())
+                bits = inputStrings[i];
         }
+    }
+    // TO DO: BYTE STUFFING
+    // CRC checksum bytes
+    for (int i = 0; i < messages.size(); ++i)
+    {
+        NodeMessage_Base *nmsg = new NodeMessage_Base("node1");
+        nmsg->setPayload(messages[i].content.c_str());
+        messageHeader header;
+        header.messageId = i;
+        //header.sendingTime = simTime();
+        nmsg->setHeader(header);
 
-        for (int i = 0; i < messages.size(); ++i)
-        {
-            NodeMessage_Base *nmsg = new NodeMessage_Base("node1");
-        }
-        //delay(200);
+        send(nmsg, "out");
+
+        std::cout << messages[i].modification << messages[i].loss << messages[i].duplicated << messages[i].delay << " " << messages[i].content << std::endl;
+        /*if (messages[i].duplicated)
+            sendDelayed(nmsg, 0.01, "out");
+
+        if (messages[i].delay)
+            sendDelayed(nmsg, par("delay").doubleValue(), "out");*/
     }
 
 }
