@@ -1,0 +1,19 @@
+ - nodes[0] sends message with id = 0 and content = $A flower, sometimes known0as a bloom or blossom$ at t = 3s with modification
+ - nodes[1] received message with id = 0 and content = $A flower, sometimes known0as a bloom or blossom$ at t = 3s with modification, and piggybacking NACK number 0
+ - nodes[1] drops message with id = 0
+ - nodes[0] sends message with id = 1 and content = $is the reproductive/$ structure found in flowering plants$ at t = 3.2s
+ - nodes[1] received message with id = 1 and content = $is the reproductive/$ structure found in flowering plants$ at t = 3.2s and piggybacking ACK number 1
+ - nodes[0] timeout for message id = 3 at t = 5.4s
+ - nodes[0] sends message with id = 3 and content = $The biological function of a flower is to facilitate reproduction,$ at t = 5.4s
+ - nodes[1] received message with id = 3 and content = $The biological function of a flower is to facilitate reproduction,$ at t = 5.4s and piggybacking ACK number 1
+ - nodes[0] sends message with id = 4 and content = $usually by providing a mechanism for the union of sperm with eggs.$ at t = 6.6s
+ - nodes[1] received message with id = 4 and content = $usually by providing a mechanism for the union of sperm with eggs.$ at t = 6.6s and piggybacking ACK number 1
+ - nodes[0] sends message with id = 5 and content = $Flowers may facilitate outcrossing/$$ at t = 6.8s
+ - nodes[1] received message with id = 5 and content = $Flowers may facilitate outcrossing/$$ at t = 6.8s and piggybacking ACK number 1
+ - nodes[0] sends message with id = 6 and content = $(fusion of sperm and eggs from different individuals in a population) $ at t = 7s
+ - nodes[1] received message with id = 6 and content = $(fusion of sperm and eggs from different individuals in a population) $ at t = 7s and piggybacking ACK number 1
+ ----------------------------------------
+ - nodes[0] end of input file
+ - total transmission time = 7.2
+ - total number of transmissions = 8
+ - the network throughput = 0.694444
