@@ -36,7 +36,7 @@ packet NodeMessage {
     @customize(true);  // see the generated C++ header for more info
     messageHeader header;
     string payload;
-    string trailer;
+    char trailer;
     control piggybacking;
     int piggybackingId;
 }

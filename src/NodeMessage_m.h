@@ -40,7 +40,7 @@
  *     \@customize(true);  // see the generated C++ header for more info
  *     messageHeader header;
  *     string payload;
- *     string trailer;
+ *     char trailer;
  *     control piggybacking;
  *     int piggybackingId;
  * }
@@ -75,7 +75,7 @@ class NodeMessage_Base : public ::omnetpp::cPacket
   protected:
     messageHeader header;
     ::omnetpp::opp_string payload;
-    ::omnetpp::opp_string trailer;
+    char trailer;
     control piggybacking;
     int piggybackingId;
 
@@ -105,8 +105,8 @@ class NodeMessage_Base : public ::omnetpp::cPacket
     virtual void setHeader(const messageHeader& header);
     virtual const char * getPayload() const;
     virtual void setPayload(const char * payload);
-    virtual const char * getTrailer() const;
-    virtual void setTrailer(const char * trailer);
+    virtual char getTrailer() const;
+    virtual void setTrailer(char trailer);
     virtual control& getPiggybacking();
     virtual const control& getPiggybacking() const {return const_cast<NodeMessage_Base*>(this)->getPiggybacking();}
     virtual void setPiggybacking(const control& piggybacking);

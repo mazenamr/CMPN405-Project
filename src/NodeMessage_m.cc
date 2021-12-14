@@ -179,6 +179,7 @@ inline std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec)
 
 NodeMessage_Base::NodeMessage_Base(const char *name, short kind) : ::omnetpp::cPacket(name,kind)
 {
+    this->trailer = 0;
     this->piggybackingId = 0;
 }
 
@@ -248,12 +249,12 @@ void NodeMessage_Base::setPayload(const char * payload)
     this->payload = payload;
 }
 
-const char * NodeMessage_Base::getTrailer() const
+char NodeMessage_Base::getTrailer() const
 {
-    return this->trailer.c_str();
+    return this->trailer;
 }
 
-void NodeMessage_Base::setTrailer(const char * trailer)
+void NodeMessage_Base::setTrailer(char trailer)
 {
     this->trailer = trailer;
 }
@@ -406,7 +407,7 @@ const char *NodeMessageDescriptor::getFieldTypeString(int field) const
     static const char *fieldTypeStrings[] = {
         "messageHeader",
         "string",
-        "string",
+        "char",
         "control",
         "int",
     };
@@ -479,7 +480,7 @@ std::string NodeMessageDescriptor::getFieldValueAsString(void *object, int field
     switch (field) {
         case 0: {std::stringstream out; out << pp->getHeader(); return out.str();}
         case 1: return oppstring2string(pp->getPayload());
-        case 2: return oppstring2string(pp->getTrailer());
+        case 2: return long2string(pp->getTrailer());
         case 3: {std::stringstream out; out << pp->getPiggybacking(); return out.str();}
         case 4: return long2string(pp->getPiggybackingId());
         default: return "";
@@ -497,7 +498,7 @@ bool NodeMessageDescriptor::setFieldValueAsString(void *object, int field, int i
     NodeMessage_Base *pp = (NodeMessage_Base *)object; (void)pp;
     switch (field) {
         case 1: pp->setPayload((value)); return true;
-        case 2: pp->setTrailer((value)); return true;
+        case 2: pp->setTrailer(string2long(value)); return true;
         case 4: pp->setPiggybackingId(string2long(value)); return true;
         default: return false;
     }
