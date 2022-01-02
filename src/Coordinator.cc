@@ -26,37 +26,29 @@ Define_Module(Coordinator);
 void Coordinator::initialize()
 {
     std::ifstream fin(fileName);
-    std::vector<std::string> inputStrings(par("n").intValue()*3);
-
-    for (auto&& i: inputStrings)
+    std::vector<std::string> inputStrings;
+    std::string temp;
+    while (fin >> temp)
     {
-        fin >> i;
+        inputStrings.push_back(temp);
     }
 
-    std::vector<Instruction> instructions(par("n").intValue());
-    instructions[0].nodeId = stoi(inputStrings[0]);
-    instructions[0].fileName = inputStrings[1];
-    instructions[0].isStart = false;
-    instructions[0].startTime = 0;
-    if (inputStrings[2] == "start")
+    std::vector<Instruction> instructions;
+    for (int i = 0; i < inputStrings.size(); i += 2)
     {
-        instructions[0].isStart = true;
-        instructions[0].startTime = stoi(inputStrings[3]);
-        instructions[1].nodeId = stoi(inputStrings[4]);
-        instructions[1].fileName = inputStrings[5];
-        instructions[1].isStart = false;
-        instructions[1].startTime = 0;
-    }
-    else
-    {
-        instructions[1].nodeId = stoi(inputStrings[2]);
-        instructions[1].fileName = inputStrings[3];
-        instructions[1].isStart = true;
-        instructions[1].startTime = stoi(inputStrings[5]);
+        Instruction x(stoi(inputStrings[i]), inputStrings[i + 1], false, 0);
+
+        if (i + 2 < inputStrings.size() && inputStrings[i + 2] == "start")
+        {
+            x.isStart = true;
+            x.startTime = stoi(inputStrings[i + 3]);
+            i += 2;
+        }
+
+        instructions.push_back(x);
     }
 
-
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < instructions.size(); ++i)
     {
         CoordinatorMessage_Base *node = new CoordinatorMessage_Base("coordinator");
         node->setConfigFileName(instructions[i].fileName.c_str());
@@ -64,6 +56,7 @@ void Coordinator::initialize()
         node->setStartTime(instructions[i].isStart ? instructions[i].startTime : 0);
         std::cout << node->getName() << " "<< node->getConfigFileName() << " " << node->getIsStart() << " " << node->getStartTime() << std::endl;
         sendDelayed(node, instructions[i].startTime - simTime(), "outs", instructions[i].nodeId);
+        // std::cout << instructions[i].nodeId << " " << instructions[i].fileName << " " << instructions[i].isStart << " " << instructions[i].startTime << "\n";
     }
 }
 
