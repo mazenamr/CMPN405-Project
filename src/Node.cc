@@ -67,6 +67,10 @@ void Node::sendMessage(std::string messageName)
         return;
     }
 
+    for (int i = 0; i < par("windowSize").intValue(); ++i)
+    {
+
+    }
 
     countTransmissions++;
     if (!messages[index].modification && !messages[index].loss)
@@ -168,6 +172,7 @@ void Node::handleMessage(cMessage *msg)
             if (i != inputStrings.size())
                 bits = inputStrings[i];
         }
+        ACKs = std::vector<bool>(messages.size(), false);
 
         byteStuffing();
 
@@ -230,6 +235,7 @@ void Node::handleMessage(cMessage *msg)
             log << " - " << getName() << "[" << getIndex() << "]" << " timeout for message id = " << index << " at t = " << simTime().dbl() << "s\n";
             log.close();
         }
+        NodeMessage_Base *receivedMsg = check_and_cast<NodeMessage_Base*>(msg);
         sendMessage("starter");
     }
     cancelAndDelete(msg);
