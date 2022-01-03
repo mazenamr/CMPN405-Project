@@ -56,7 +56,6 @@ void Coordinator::initialize()
         node->setStartTime(instructions[i].isStart ? instructions[i].startTime : 0);
         std::cout << node->getName() << " "<< node->getConfigFileName() << " " << node->getIsStart() << " " << node->getStartTime() << std::endl;
         sendDelayed(node, instructions[i].startTime - simTime(), "outs", instructions[i].nodeId);
-        // std::cout << instructions[i].nodeId << " " << instructions[i].fileName << " " << instructions[i].isStart << " " << instructions[i].startTime << "\n";
     }
 }
 
