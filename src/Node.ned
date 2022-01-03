@@ -23,6 +23,7 @@ simple Node
     parameters:
     	double delay = default(0.2);
     	double timer = default(1);
+    	int windowSize = default(2);
     gates:
         input coord;
         input in;
