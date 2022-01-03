@@ -51,6 +51,7 @@ class Node : public cSimpleModule
       }
     };
 
+    std::vector<bool> ACKs;
     std::vector<Message> messages;
     std::string outputPath = "../outputs/pair01.txt";
     int index = 0;
