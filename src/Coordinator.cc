@@ -48,7 +48,7 @@ void Coordinator::initialize()
         instructions.push_back(x);
     }
 
-    for (int i = 0; i < instructions.size(); ++i)
+    for (int i = 0; i < par("n").intValue(); ++i)
     {
         CoordinatorMessage_Base *node = new CoordinatorMessage_Base("coordinator");
         node->setConfigFileName(instructions[i].fileName.c_str());

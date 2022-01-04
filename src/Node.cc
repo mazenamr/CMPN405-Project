@@ -29,7 +29,6 @@ Define_Module(Node);
 void Node::initialize()
 {
     // TODO - Generated method body
-
 }
 
 char Node::CRC(std::string message, int generator)
@@ -38,12 +37,135 @@ char Node::CRC(std::string message, int generator)
     int remainder = 0;
     for (int i = 0; i < message.length(); i++)
     {
-        remainder = (remainder) ^ (message[i]);
-        remainder = (remainder << 1);
+        remainder ^= (message[i]);
+        remainder <<= 1;
         if ((remainder >> (size - 1)) >= 1)
             remainder ^= generator;
     }
     return (char)remainder;
+}
+
+void Node::sendSRUpdated(cMessage* msg, int piggyback, bool error)
+{
+    for (int i = 0; i < messages.size(); ++i)
+    {
+        if (acks[i] == false)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    if (index == messages.size())
+    {
+        // done sending
+        NodeMessage_Base *nmsg = new NodeMessage_Base(getName());
+        nmsg->setPiggybacking(error ? NACK : ACK);
+        //nmsg->setPiggybackingId(piggyback);
+        messageHeader header;
+        header.messageId = -1;
+        nmsg->setHeader(header);
+        sendDelayed(nmsg, 0.2, "out");
+        return;
+    }
+
+    for (int i = index; i < par("windowSize").intValue(); ++i)
+    {
+        if (!acks[i] && !sent[i])
+        {
+            sent[i] = true;
+            NodeMessage_Base *nmsg = new NodeMessage_Base(getName());
+            nmsg->setPiggybacking(error ? NACK : ACK);
+            nmsg->setPiggybackingId(piggyback);
+            nmsg->setTrailer(CRC(messages[i].content, GENERATOR));
+            if (!messages[i].loss)
+            {
+                // modify bit block
+                if (messages[i].modification)
+                {
+                    int randomCharacterIndex = uniform(0, messages[i].content.size());
+                    int randomBitIndex = uniform(0, 7);
+                    messages[i].content[randomCharacterIndex] = messages[i].content[randomCharacterIndex] ^ (1 << randomBitIndex);
+                }
+
+                double delay = messages[i].delay ? par("delay").doubleValue() : 0.0;
+                nmsg->setPayload(messages[i].content.c_str());
+                messageHeader header;
+                header.messageId = index;
+                header.sendingTime = simTime().dbl();
+                nmsg->setHeader(header);
+
+                if (messages[i].duplicated)
+                {
+                    countTransmissions++;
+                    sendDelayed(nmsg->dup(), 0.01 + delay + i * 0.05, "out");
+                }
+
+                // normal send
+                sendDelayed(nmsg->dup(), delay + i * 0.05, "out");
+                std::cout << " - " << getName() << "[" << getIndex() << "]" << " sends message with id = " << nmsg->getHeader().messageId
+                        << " and content = " << nmsg->getPayload() << " at t = " << simTime().dbl() + delay << "s" << (messages[index].modification ? " with modification\n" : "\n");
+            }
+
+            scheduleAt(simTime() + par("timer").doubleValue() + i * 0.05 , nmsg->dup());
+        }
+    }
+}
+
+void Node::sendSR(std::string messageName, int piggyback, bool error, int seq)
+{
+
+    if (index == messages.size())
+    {
+        // done sending
+        NodeMessage_Base *nmsg = new NodeMessage_Base(getName());
+        nmsg->setPiggybacking(error ? NACK : ACK);
+        nmsg->setPiggybackingId(piggyback);
+        messageHeader header;
+        header.messageId = -1;
+        nmsg->setHeader(header);
+        sendDelayed(nmsg, 0.2, "out");
+        return;
+    }
+
+    NodeMessage_Base *nmsg = new NodeMessage_Base(getName());
+    nmsg->setPiggybacking(error ? NACK : ACK);
+    nmsg->setPiggybackingId(piggyback);
+    nmsg->setTrailer(CRC(messages[index].content, GENERATOR));
+    if (!messages[index].loss)
+    {
+        // modify bit block
+        if (messages[index].modification)
+        {
+            int randomCharacterIndex = uniform(0, messages[index].content.size());
+            int randomBitIndex = uniform(0, 7);
+            messages[index].content[randomCharacterIndex] = messages[index].content[randomCharacterIndex] ^ (1 << randomBitIndex);
+        }
+
+        double delay = messages[index].delay ? par("delay").doubleValue() : 0.0;
+        nmsg->setPayload(messages[index].content.c_str());
+        messageHeader header;
+        header.messageId = index;
+        header.sendingTime = simTime().dbl();
+        nmsg->setHeader(header);
+
+        if (messages[index].duplicated)
+        {
+            countTransmissions++;
+            sendDelayed(nmsg->dup(), 0.01 + delay + seq * 0.5, "out");
+        }
+
+        // normal send
+        sendDelayed(nmsg->dup(), delay + seq * 0.5, "out");
+        scheduleAt(simTime() + par("timer").doubleValue() + seq * 0.5, nmsg->dup());
+        index++;
+        std::cout << " - " << getName() << "[" << getIndex() << "]" << " sends message with id = " << nmsg->getHeader().messageId
+                << " and content = " << nmsg->getPayload() << " at t = " << simTime().dbl() + delay << "s" << (messages[index].modification ? " with modification\n" : "\n");
+    }
+    else
+    {
+        scheduleAt(simTime() + par("timer").doubleValue() , nmsg->dup());
+    }
 }
 
 void Node::sendMessage(std::string messageName)
@@ -153,7 +275,7 @@ void Node::handleMessage(cMessage *msg)
     {
         CoordinatorMessage_Base *cmsg = check_and_cast<CoordinatorMessage_Base*>(msg);
         char path[] = "../inputs/";
-        bool isStart = cmsg->getIsStart();
+        isStarter = cmsg->getIsStart();
         std::strcat(path, cmsg->getConfigFileName());
         std::ifstream fin(path);
         std::vector<std::string> inputStrings;
@@ -167,7 +289,6 @@ void Node::handleMessage(cMessage *msg)
         std::string bits = inputStrings[0];
         for (int i = 1; i < inputStrings.size(); ++i)
         {
-
             std::string message = "";
             while (inputStrings[i][0] != '0' && inputStrings[i][0] != '1')
             {
@@ -182,21 +303,61 @@ void Node::handleMessage(cMessage *msg)
             if (i != inputStrings.size())
                 bits = inputStrings[i];
         }
-        ACKs = std::vector<bool>(messages.size(), false);
-
+        acks = std::vector<bool>(messages.size(), false);
+        sent = std::vector<bool>(messages.size(), false);
         byteStuffing();
 
-        if(isStart)
+        if(isStarter)
         {
+
             std::ofstream myFile(outputPath);
             myFile.close();
-            sendMessage("starter");
+            for (int i = 0; i < par("windowSize").intValue(); ++i)
+                sendSR(msg->getName(), i, false, i);
         }
 
         cancelAndDelete(msg);
         return;
     }
 
+    if (!msg->isSelfMessage())
+    {
+
+        std::ofstream log;
+        log.open(outputPath, std::ios::app);
+
+        NodeMessage_Base *receivedMsg = check_and_cast<NodeMessage_Base*>(msg);
+        if (receivedMsg->getPiggybackingId() != 0)
+        {
+            if (receivedMsg->getPiggybacking() == ACK)
+                acks[receivedMsg->getPiggybackingId() - 1] = ACK;
+        }
+
+        /*
+        if (index == messages.size() && receivedMsg->getHeader().messageId == -1)
+                    return;
+        */
+
+        std::string crc = std::string(receivedMsg->getPayload()) + receivedMsg->getTrailer();
+        bool error = ((int)CRC(crc, GENERATOR) != 0);
+        sendSR(getName(), receivedMsg->getPiggybackingId(), error);
+        std::cout << " - " << getName() << "[" << getIndex() << "]" << " received message with id = " << receivedMsg->getHeader().messageId
+                            << " and content = " << receivedMsg->getPayload() << " at t = " << simTime().dbl() << "s" << (error ? " with modification, " : " ")
+                            << "and piggybacking " << (error ? "NACK" : "ACK") << " number " << (error ? NACK : ACK) << "\n";
+        log.close();
+    }
+
+    if (msg->isSelfMessage())
+    {
+        NodeMessage_Base *receivedMsg = check_and_cast<NodeMessage_Base*>(msg);
+
+        if (!acks[receivedMsg->getPiggybackingId()])
+        {
+            sendDelayed(msg->dup(), 0, "out");
+            scheduleAt(simTime() + par("timer").doubleValue() , msg->dup());
+        }
+    }
+    /*
     if (strcmp(msg->getName(), "starter") == 0)
     {
         std::ofstream log;
@@ -256,6 +417,7 @@ void Node::handleMessage(cMessage *msg)
         NodeMessage_Base *receivedMsg = check_and_cast<NodeMessage_Base*>(msg);
         sendMessage("starter");
     }
+    */
     cancelAndDelete(msg);
 
 }
