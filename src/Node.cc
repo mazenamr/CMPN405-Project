@@ -21,6 +21,7 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
+#include <bitset>
 
 #define GENERATOR 0b100000111
 
@@ -166,6 +167,98 @@ void Node::sendSR(std::string messageName, int piggyback, bool error, int seq)
     {
         scheduleAt(simTime() + par("timer").doubleValue() , nmsg->dup());
     }
+std::string Node::generateCodeMessage(std::string message)
+{
+    std::string codeMessage = "";
+    for (int i = 0; i < message.length(); i++)
+    {
+        std::bitset<8> bits(message[i]);
+        codeMessage += bits.to_string();
+    }
+    //1000001
+    //codeMessage = "1101001100110101"; 
+    int r = 0;
+    int m = codeMessage.size(); // number of bits in the mesaage
+    int i = 0;
+    while (pow(2, i) <= m + 1)
+    {
+        i++;
+    }
+    r = i;        
+    codeMessage.insert(0, "9");
+    //cout << codeMessage << " " << r;
+    // We now need to insert hamming bits at there correct posistions
+    // 1000001 -> 0010001001
+    std::vector<int> hammingBitsPositions;
+    std::vector<int> hammingBits(r, 0);
+    for (int i = 0; i < r ;i++)
+    {
+        int x = pow(2, i);
+        codeMessage.insert(x, "0");
+        hammingBitsPositions.push_back(x);
+        
+    }
+    for (int i = 0; i < hammingBits.size(); i++)
+    {
+        int stride = pow(2, i);
+        int lastIndex = -1;
+        //initial elements
+        for (int j = stride; j < stride * 2; j++)
+        {
+            if (j < codeMessage.size())
+            {
+                std::cout << "for p" << i << " we use m" << j << endl;
+                hammingBits[i] = hammingBits[i] ^ (codeMessage[j] == '1' ? 1 : 0);
+                lastIndex = j + 1;
+            }
+        }
+        //alternating part
+        lastIndex += stride;
+        // if stride == 1
+        if (stride == 1)
+        {
+            for (int k = lastIndex; k < codeMessage.size(); k++)
+            {
+                if (k % 2 != 0)
+                {
+                    std::cout << "for p" << i << " we use m" << k << endl;
+                    hammingBits[i] = hammingBits[i] ^ (codeMessage[k] == '1' ? 1 : 0);
+                }
+            }
+        }
+        else
+        {
+            int flag = lastIndex;
+            while (flag < codeMessage.size())
+            {
+                int x = lastIndex;
+                int y = lastIndex + stride;
+                for (int k = x; k < y; k++)
+                {
+                    if (k < codeMessage.size())
+                    {
+                        std::cout << "for p" << i << " we use m" << k << endl;
+                        hammingBits[i] = hammingBits[i] ^ (codeMessage[k] == '1' ? 1 : 0);
+                        lastIndex = k + 1;
+                    }
+                }
+                lastIndex += stride;
+                flag += stride;
+            }
+        }
+    }
+    //insert into message
+    for (int i = 0; i < hammingBits.size(); i++)
+    {
+        std::cout << hammingBits[i] << " ";
+        codeMessage[hammingBitsPositions[i]] =  (hammingBits[i]? '1': '0');
+    }
+    codeMessage.erase(0, 1);
+    std::cout << "code word is " << codeMessage << " with count " << codeMessage.size() << endl;
+    //cout << codeMessage.size() << endl;
+    //cout << codeMessage;
+    // Now we need to calculate 
+    return codeMessage;
 }
 
 void Node::sendMessage(std::string messageName)
