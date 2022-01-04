@@ -51,13 +51,19 @@ class Node : public cSimpleModule
       }
     };
 
-    std::vector<bool> ACKs;
+    std::vector<bool> acks;
+    std::vector<bool> sent;
+    std::vector<int> seq;
     std::vector<Message> messages;
     std::string outputPath = "../outputs/pair01.txt";
+    int count = 0;
+    bool isStarter = false;
     int index = 0;
     int countTransmissions = 0;
     int correctTransmissions = 0;
     int sequenceNumber = 0;
+    void Node::sendSRUpdated(cMessage* msg, int piggyback, bool error = false);
+    void sendSR(std::string messageName, int piggyback, bool error = false, int seq = 0);
     void sendMessage(std::string messageName);
     void byteStuffing();
     char CRC(std::string, int generator);
