@@ -67,11 +67,6 @@ void Node::sendMessage(std::string messageName)
         return;
     }
 
-    for (int i = 0; i < par("windowSize").intValue(); ++i)
-    {
-
-    }
-
     countTransmissions++;
     if (!messages[index].modification && !messages[index].loss)
         correctTransmissions++;
@@ -133,6 +128,21 @@ void Node::byteStuffing()
         }
         messages[i].content.insert(0, "$");
         messages[i].content.insert(messages[i].content.size(), "$");
+    }
+}
+
+void Node::byteDeStuffing(std::string message)
+{
+    // remove the first and last character of the first and last character of the message
+    message.erase(0, 1);
+    message.erase(message.size() - 1, 1);
+    for(int i = 0; i < message.size() - 1; i++)
+    {
+        if(message[i] == '/' && (message[i + 1] == '/' || message[i + 1] == '$'))
+        {
+            message.erase(i, 1);
+            i--;
+        }
     }
 }
 
@@ -201,8 +211,16 @@ void Node::handleMessage(cMessage *msg)
         }
         else
         {
-            std::string crc = std::string(receivedMsg->getPayload()) + receivedMsg->getTrailer();
-            bool error = ((int)CRC(crc, GENERATOR) != 0);
+            bool error = false;
+            if(par("errorCheck").intValue() == 0)
+            {
+                std::string crc = std::string(receivedMsg->getPayload()) + receivedMsg->getTrailer();
+                error = ((int)CRC(crc, GENERATOR) != 0);
+            }
+            else
+            {
+                // do hamming
+            }
             std::cout << " - " << getName() << "[" << getIndex() << "]" << " received message with id = " << receivedMsg->getHeader().messageId
                                 << " and content = " << receivedMsg->getPayload() << " at t = " << simTime().dbl() << "s" << (error ? " with modification, " : " ")
                                 << "and piggybacking " << (error ? "NACK" : "ACK") << " number " << (error ? NACK : ACK) << "\n";

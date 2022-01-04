@@ -60,6 +60,7 @@ class Node : public cSimpleModule
     int sequenceNumber = 0;
     void sendMessage(std::string messageName);
     void byteStuffing();
+    void byteDeStuffing(std::string message));
     char CRC(std::string, int generator);
 };
 
