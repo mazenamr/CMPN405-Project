@@ -66,6 +66,7 @@ class Node : public cSimpleModule
     void sendSR(std::string messageName, int piggyback, bool error = false, int seq = 0);
     void sendMessage(std::string messageName);
     void byteStuffing();
+    void byteDeStuffing(std::string message));
     char CRC(std::string, int generator);
 };
 
