@@ -1,0 +1,82 @@
+ - nodes[5] sends DUPLICATE message with id = 0 and content = $/$An aurora, also known as the polar lights/$ or aurora polaris,$ at t = 3.01s and piggybacking: ACK number 0
+ - nodes[5] sends DUPLICATE message with id = 0 and content = $/$An aurora, also known as the polar lights/$ or aurora polaris,$ at t = 3.01s and piggybacking: ACK number 0
+ - nodes[5] sends DUPLICATE message with id = 1 and content = $is a natural light display in Earth's sky,$ at t = 3.06s and piggybacking: ACK number 0
+ - nodes[4] received message with id = 0 and content = $An aurora, also known as the polar lights$ or aurora polaris, at t = 3s and piggybacking ACK number 0
+ - nodes[4] sends DUPLICATE message with id = 0 and content = $An electric car is an automobIle that is$ at t = 3.01s with modification
+ and piggybacking: ACK number 1
+ - nodes[4] sends DUPLICATE message with id = 1 and content = $propelled by one or more electric motors,$ at t = 3.06s and piggybacking: ACK number 1
+ - nodes[5] received message with id = 0 and content = An electric car is an automobIle that is at t = 3s with modification, and piggybacking ACK number 1
+ - nodes[5] sends DUPLICATE message with id = 2 and content = $predominantly seen in high-latitude regions$ at t = 3.06s and piggybacking: NACK number 0
+ - nodes[5] sends DUPLICATE message with id = 2 and content = $predominantly seen in high-latitude regions$ at t = 3.06s and piggybacking: NACK number 0
+ - nodes[4] received message with id = 0 and content = $An aurora, also known as the polar lights$ or aurora polaris, at t = 3.01s and piggybacking ACK number 0
+ - nodes[4] dropped duplicate message with id = 0 and content = $An aurora, also known as the polar lights$ or aurora polaris, at t = 3.01
+ - nodes[4] received message with id = 1 and content = is a natural light display in Earth's sky, at t = 3.05s and piggybacking ACK number 0
+ - nodes[5] received message with id = 1 and content = propelled by one or more electric motors, at t = 3.05s and piggybacking ACK number 1
+ - nodes[4] received message with id = 2 and content = predominantly seen in high-latitude regions at t = 3.05s and piggybacking NACK number 0
+ - nodes[4] sends DUPLICATE message with id = 0 and content = $An electric car is an automobile that is$ at t = 3.06s and piggybacking: ACK number 4
+ - nodes[5] received message with id = 0 and content = An electric car is an automobile that is at t = 3.05s and piggybacking ACK number 4
+ - nodes[5] sends DUPLICATE message with id = 4 and content = $Auroras display dynamic patterns of brilliant lights//$ at t = 3.06s and piggybacking: ACK number 2
+ - nodes[5] sends DUPLICATE message with id = 0 and content = $that appear as curtains,$ at t = 3.11s and piggybacking: ACK number 2
+ - nodes[4] received message with id = 4 and content = Auroras display dynamic patterns of brilliant lights/ at t = 3.05s and piggybacking ACK number 2
+ - nodes[4] sends DUPLICATE message with id = 2 and content = $using energy stored in batteries.$ at t = 3.06s and piggybacking: ACK number 0
+ - nodes[4] sends DUPLICATE message with id = 3 and content = $Compared to internal combustion engine (ICE) vehicles,$ at t = 3.11s and piggybacking: ACK number 0
+ - nodes[4] sends DUPLICATE message with id = 3 and content = $Compared to internal combustion engine (ICE) vehicles,$ at t = 3.11s and piggybacking: ACK number 0
+ - nodes[5] received message with id = 2 and content = using energy stored in batteries. at t = 3.05s and piggybacking ACK number 0
+ - nodes[5] sends DUPLICATE message with id = 1 and content = $rays, spirals/$$ at t = 3.11s and piggybacking: ACK number 3
+ - nodes[4] received message with id = 2 and content = predominantly seen in high-latitude regions at t = 3.06s and piggybacking NACK number 0
+ - nodes[4] dropped duplicate message with id = 2 and content = predominantly seen in high-latitude regions at t = 3.06
+ - nodes[4] received message with id = 0 and content = that appear as curtains, at t = 3.1s and piggybacking ACK number 2
+ - nodes[5] received message with id = 3 and content = Compared to internal combustion engine (ICE) vehicles, at t = 3.1s and piggybacking ACK number 0
+ - nodes[4] received message with id = 1 and content = rays, spirals$ at t = 3.1s and piggybacking ACK number 3
+ - nodes[4] sends DUPLICATE message with id = 4 and content = $electric cars are quieter,$ at t = 3.46s and piggybacking: ACK number 3
+ - nodes[4] sends DUPLICATE message with id = 4 and content = $electric cars are quieter,$ at t = 3.46s and piggybacking: ACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.1s with modification, and piggybacking ACK number 4
+ - nodes[4] sends DUPLICATE message with id = 0 and content = $have no exhaust emissions, and lower emissions overall.$ at t = 3.16s and piggybacking: NACK number 3
+ - nodes[5] received message with id = 3 and content = Compared to internal combustion engine (ICE) vehicles, at t = 3.11s and piggybacking ACK number 0
+ - nodes[5] dropped duplicate message with id = 3 and content = Compared to internal combustion engine (ICE) vehicles, at t = 3.11
+ - nodes[5] received message with id = 0 and content = have no exhaust emissions, and lower emissions overall. at t = 3.15s and piggybacking NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.15s with modification, and piggybacking ACK number 1
+ - nodes[4] sends DUPLICATE message with id = 1 and content = $In the United States and the European Union,$ at t = 3.16s and piggybacking: NACK number 3
+ - nodes[4] sends DUPLICATE message with id = 2 and content = $as of 2020, the total cost of ownersHip of recent electric vehicles$ at t = 3.21s with modification
+ and piggybacking: NACK number 3
+ - nodes[5] received message with id = 1 and content = In the United States and the European Union, at t = 3.15s and piggybacking NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.15s with modification, and piggybacking ACK number 2
+ - nodes[4] sends DUPLICATE message with id = 3 and content = $is cheaper/$ than that of equivalent ICE cars,$ at t = 3.21s and piggybacking: NACK number 3
+ - nodes[5] received message with id = 2 and content = as of 2020, the total cost of ownersHip of recent electric vehicles at t = 3.2s with modification, and piggybacking NACK number 3
+ - nodes[5] received message with id = 3 and content = is cheaper$ than that of equivalent ICE cars, at t = 3.2s and piggybacking NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.2s with modification, and piggybacking NACK number 2
+ - nodes[4] sends DUPLICATE message with id = 2 and content = $as of 2020, the total cost of ownership of recent electric vehicles$ at t = 3.21s and piggybacking: NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.2s with modification, and piggybacking ACK number 3
+ - nodes[4] sends DUPLICATE message with id = 4 and content = $due to lower fueling and maintenance costs/$/$.$ at t = 3.26s and piggybacking: NACK number 3
+ - nodes[5] received message with id = 2 and content = as of 2020, the total cost of ownership of recent electric vehicles at t = 3.2s and piggybacking NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.2s with modification, and piggybacking ACK number 4
+ - nodes[4] sends DUPLICATE message with id = 0 and content = $Charging an electric car can be done at a variety of charging stations;$ at t = 3.26s and piggybacking: NACK number 3
+ - nodes[5] received message with id = 4 and content = due to lower fueling and maintenance costs$$. at t = 3.25s and piggybacking NACK number 3
+ - nodes[5] received message with id = 0 and content = Charging an electric car can be done at a variety of charging stations; at t = 3.25s and piggybacking NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.25s with modification, and piggybacking ACK number 0
+ - nodes[4] LOSS message with id = 1 and content = $these charging stations can be i~stalled in both houses// and public areas. $ at t = 3.3s with modification
+ and piggybacking: NACK number 3
+ - nodes[4] sends DUPLICATE message with id = 1 and content = $these charging stations can be i~stalled in both houses// and public areas. $ at t = 3.31s with modification
+ and piggybacking: NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.25s with modification, and piggybacking ACK number 1
+ ----------------------------------------
+ - nodes[4] end of input file
+ - total transmission time = 3.25
+ - total number of transmissions = 16
+ - the network throughput = 3.38462
+ - nodes[5] received message with id = 1 and content = these charging stations can be i~stalled in both houses/ and public areas.  at t = 3.3s with modification, and piggybacking NACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.3s with modification, and piggybacking NACK number 1
+ ----------------------------------------
+ - nodes[4] end of input file
+ - total transmission time = 3.3
+ - total number of transmissions = 16
+ - the network throughput = 3.33333
+ - nodes[5] received message with id = 4 and content = electric cars are quieter, at t = 3.45s and piggybacking ACK number 3
+ - nodes[4] received message with id = -1 and content = NOPAYLOAD at t = 3.45s with modification, and piggybacking ACK number 2
+ ----------------------------------------
+ - nodes[4] end of input file
+ - total transmission time = 3.45
+ - total number of transmissions = 16
+ - the network throughput = 3.47826
+ - nodes[5] received message with id = 4 and content = electric cars are quieter, at t = 3.46s and piggybacking ACK number 3
+ - nodes[5] dropped duplicate message with id = 4 and content = electric cars are quieter, at t = 3.46

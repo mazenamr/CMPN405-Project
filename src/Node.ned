@@ -24,6 +24,7 @@ simple Node
     	double delay = default(0.2);
     	double timer = default(1);
     	int windowSize = default(2);
+    	int errorCheckingAlgorithm = default(0);
     gates:
         input coord;
         input in;

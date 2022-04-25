@@ -16,13 +16,15 @@
 #ifndef __SECTION1_NODE_H_
 #define __SECTION1_NODE_H_
 
+#include "CoordinatorMessage_m.h"
+#include "NodeMessage_m.h"
 #include <omnetpp.h>
 #include <vector>
+#include <queue>
+#include <bitset>
+#include <unordered_map>
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
 class Node : public cSimpleModule
 {
   protected:
@@ -51,24 +53,29 @@ class Node : public cSimpleModule
       }
     };
 
-    std::vector<bool> acks;
-    std::vector<bool> sent;
-    std::vector<int> seq;
-    std::vector<Message> messages;
-    std::string outputPath = "../outputs/pair01.txt";
-    int count = 0;
+    int maxSequence;
+    int windowSize;
+    int windowStart = 0;
+    int expectedFrame = 0;
+    bool allSent = false;
+
+    std::queue<Message> allMessages;
+    std::vector<Message> messagesToSend;
+    std::unordered_map<std::string, int> receivedStrings;
+    std::vector<bool> messageStatus;
+
     bool isStarter = false;
-    int index = 0;
     int countTransmissions = 0;
     int correctTransmissions = 0;
     int sequenceNumber = 0;
-    void Node::sendSRUpdated(cMessage* msg, int piggyback, bool error = false);
-    void sendSR(std::string messageName, int piggyback, bool error = false, int seq = 0);
-    void sendMessage(std::string messageName);
-    void byteStuffing();
-    void byteDeStuffing(std::string message);
+    int errorCheckingAlgorithm = 0;
+    std::string outputPath = "../outputs/pair01.txt";
+
+    void stuffBytes();
+    void destuffBytes(std::string& message);
+    void sendWindow(bool error);
     char CRC(std::string, int generator);
-    std::string generateCodeMessage(std::string message);
+    std::string getHammingParity(std::string message);
 };
 
 #endif
