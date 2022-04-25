@@ -1,19 +1,91 @@
- - nodes[0] sends message with id = 0 and content = $A flower, sometimes known0as a bloom or blossom$ at t = 3s with modification
- - nodes[1] received message with id = 0 and content = $A flower, sometimes known0as a bloom or blossom$ at t = 3s with modification, and piggybacking NACK number 0
- - nodes[1] drops message with id = 0
- - nodes[0] sends message with id = 1 and content = $is the reproductive/$ structure found in flowering plants$ at t = 3.2s
- - nodes[1] received message with id = 1 and content = $is the reproductive/$ structure found in flowering plants$ at t = 3.2s and piggybacking ACK number 1
- - nodes[0] timeout for message id = 3 at t = 5.4s
- - nodes[0] sends message with id = 3 and content = $The biological function of a flower is to facilitate reproduction,$ at t = 5.4s
- - nodes[1] received message with id = 3 and content = $The biological function of a flower is to facilitate reproduction,$ at t = 5.4s and piggybacking ACK number 1
- - nodes[0] sends message with id = 4 and content = $usually by providing a mechanism for the union of sperm with eggs.$ at t = 6.6s
- - nodes[1] received message with id = 4 and content = $usually by providing a mechanism for the union of sperm with eggs.$ at t = 6.6s and piggybacking ACK number 1
- - nodes[0] sends message with id = 5 and content = $Flowers may facilitate outcrossing/$$ at t = 6.8s
- - nodes[1] received message with id = 5 and content = $Flowers may facilitate outcrossing/$$ at t = 6.8s and piggybacking ACK number 1
- - nodes[0] sends message with id = 6 and content = $(fusion of sperm and eggs from different individuals in a population) $ at t = 7s
- - nodes[1] received message with id = 6 and content = $(fusion of sperm and eggs from different individuals in a population) $ at t = 7s and piggybacking ACK number 1
+ - nodes[0] sends DUPLICATE message with id = 0 and content = $A flower, sometimes known0as a bloom or blossom$ at t = 3.01s with modification
+ and piggybacking: ACK number 0
+ - nodes[0] sends DUPLICATE message with id = 0 and content = $A flower, sometimes known0as a bloom or blossom$ at t = 3.01s with modification
+ and piggybacking: ACK number 0
+ - nodes[0] sends DUPLICATE message with id = 1 and content = $is the reproductive/$ structure found in flowering plants$ at t = 3.06s and piggybacking: ACK number 0
+ - nodes[1] received message with id = 0 and content = A flower, sometimes known0as a bloom or blossom at t = 3s with modification, and piggybacking ACK number 0
+ - nodes[1] sends DUPLICATE message with id = 0 and content = $The violin, sometimes known as a fiddle$ at t = 3.01s and piggybacking: NACK number 0
+ - nodes[1] sends DUPLICATE message with id = 1 and content = $is a wooden chordophone (string instrument)$ at t = 3.06s and piggybacking: NACK number 0
+ - nodes[1] sends DUPLICATE message with id = 1 and content = $is a wooden chordophone (string instrument)$ at t = 3.06s and piggybacking: NACK number 0
+ - nodes[0] received message with id = 0 and content = The violin, sometimes known as a fiddle at t = 3s and piggybacking NACK number 0
+ - nodes[0] sends DUPLICATE message with id = 0 and content = $A flower, sometimes known as a bloom or blossom$ at t = 3.01s and piggybacking: ACK number 1
+ - nodes[1] received message with id = 0 and content = A flower, sometimes known as a bloom or blossom at t = 3s and piggybacking ACK number 1
+ - nodes[1] LOSS message with id = 2 and content = $in the violin family.$ at t = 3.05s and piggybacking: ACK number 1
+ - nodes[1] sends DUPLICATE message with id = 2 and content = $in the violin family.$ at t = 3.06s and piggybacking: ACK number 1
+ - nodes[1] received message with id = 0 and content = A flower, sometimes known0as a bloom or blossom at t = 3.01s with modification, and piggybacking ACK number 0
+ - nodes[1] dropped duplicate message with id = 0 and content = A flower, sometimes known0as a bloom or blossom at t = 3.01
+ - nodes[1] received message with id = 1 and content = is the reproductive$ structure found in flowering plants at t = 3.05s and piggybacking ACK number 0
+ - nodes[1] sends DUPLICATE message with id = 0 and content = $(soprano) in the family in regular use.$ at t = 3.06s and piggybacking: ACK number 2
+ - nodes[1] sends DUPLICATE message with id = 1 and content = $[a] The violin typically has four strings,$ at t = 3.11s and piggybacking: ACK number 2
+ - nodes[0] received message with id = 1 and content = is a wooden chordophone (string instrument) at t = 3.05s and piggybacking NACK number 0
+ - nodes[0] sends DUPLICATE message with id = 0 and content = $A flower, sometimes known as a bloom or blossom$ at t = 3.06s and piggybacking: ACK number 2
+ - nodes[0] received message with id = 2 and content = in the violin family. at t = 3.05s and piggybacking ACK number 1
+ - nodes[0] LOSS message with id = 2 and content = $(plants of the division Magnoliophyta, also called// angiosperms/$).$ at t = 3.1s and piggybacking: ACK number 3
+ - nodes[0] sends DUPLICATE message with id = 2 and content = $(plants of the division Magnoliophyta, also called// angiosperms/$).$ at t = 3.11s and piggybacking: ACK number 3
+ - nodes[0] received message with id = 0 and content = (soprano) in the family in regular use. at t = 3.05s and piggybacking ACK number 2
+ - nodes[0] sends DUPLICATE message with id = 3 and content = $The biological function of a flower is to facilitate reproduction,$ at t = 3.11s and piggybacking: ACK number 4
+ - nodes[1] received message with id = 0 and content = A flower, sometimes known as a bloom or blossom at t = 3.05s and piggybacking ACK number 2
+ - nodes[1] dropped duplicate message with id = 0 and content = A flower, sometimes known as a bloom or blossom at t = 3.05
+ - nodes[0] received message with id = 1 and content = is a wooden chordophone (string instrument) at t = 3.06s and piggybacking NACK number 0
+ - nodes[0] dropped duplicate message with id = 1 and content = is a wooden chordophone (string instrument) at t = 3.06
+ - nodes[0] received message with id = 1 and content = [a] The violin typically has four strings, at t = 3.1s and piggybacking ACK number 2
+ - nodes[1] received message with id = 2 and content = (plants of the division Magnoliophyta, also called/ angiosperms$). at t = 3.1s and piggybacking ACK number 3
+ - nodes[1] sends DUPLICATE message with id = 3 and content = $fifths with notes G3, D4, A4, E5,$ at t = 3.11s and piggybacking: ACK number 4
+ - nodes[1] LOSS message with id = 4 and content = $and is most commonly played by drawing$ at t = 3.15s and piggybacking: ACK number 4
+ - nodes[1] sends DUPLICATE message with id = 4 and content = $and is most commonly played by drawing$ at t = 3.16s and piggybacking: ACK number 4
+ - nodes[1] received message with id = 3 and content = The biological function of a flower is to facilitate reproduction, at t = 3.1s and piggybacking ACK number 4
+ - nodes[1] sends DUPLICATE message with id = 0 and content = $a bow across its strings.$ at t = 3.16s and piggybacking: ACK number 0
+ - nodes[0] received message with id = 3 and content = fifths with notes G3, D4, A4, E5, at t = 3.1s and piggybacking ACK number 4
+ - nodes[0] sends DUPLICATE message with id = 4 and content = $usually by providing a mechanism for the union of sperm with eggs.$ at t = 3.41s and piggybacking: ACK number 2
+ - nodes[0] sends DUPLICATE message with id = 0 and content = $Flowers may facilitate outcrossing/$$ at t = 3.16s and piggybacking: ACK number 2
+ - nodes[0] received message with id = 4 and content = and is most commonly played by drawing at t = 3.15s and piggybacking ACK number 4
+ - nodes[0] received message with id = 0 and content = a bow across its strings. at t = 3.15s and piggybacking ACK number 0
+ - nodes[0] sends DUPLICATE message with id = 1 and content = $(fusion of sperm and eggs from different individuals in a population) $ at t = 3.21s and piggybacking: ACK number 4
+ - nodes[1] received message with id = 0 and content = Flowers may facilitate outcrossing$ at t = 3.15s and piggybacking ACK number 2
+ - nodes[1] sends DUPLICATE message with id = 2 and content = $the strings/$ with the fi.gers (pizzicato)$ at t = 3.46s with modification
+ and piggybacking: ACK number 1
+ - nodes[1] sends DUPLICATE message with id = 3 and content = $and, in specialized cases, by striking$ at t = 3.21s and piggybacking: ACK number 1
+ - nodes[1] received message with id = 1 and content = (fusion of sperm and eggs from different individuals in a population)  at t = 3.2s and piggybacking ACK number 4
+ - nodes[1] sends DUPLICATE message with id = 4 and content = $the strings with the wooden side/$ of the bow$ at t = 3.21s and piggybacking: ACK number 2
+ - nodes[1] sends DUPLICATE message with id = 4 and content = $the strings with the wooden side/$ of the bow$ at t = 3.21s and piggybacking: ACK number 2
+ - nodes[1] sends DUPLICATE message with id = 0 and content = $(col legno). $ at t = 3.26s and piggybacking: ACK number 2
+ - nodes[0] received message with id = 3 and content = and, in specialized cases, by striking at t = 3.2s and piggybacking ACK number 1
+ - nodes[0] received message with id = 4 and content = the strings with the wooden side$ of the bow at t = 3.2s and piggybacking ACK number 2
+ - nodes[1] received message with id = -1 and content = NOPAYLOAD at t = 3.2s with modification, and piggybacking ACK number 0
+ - nodes[1] sends DUPLICATE message with id = 1 and content = $It can also be played by plucking$ at t = 3.26s and piggybacking: NACK number 2
+ - nodes[1] received message with id = -1 and content = NOPAYLOAD at t = 3.2s with modification, and piggybacking ACK number 1
+ ----------------------------------------
+ - nodes[1] end of input file
+ - total transmission time = 3.2
+ - total number of transmissions = 15
+ - the network throughput = 5
+ - nodes[0] received message with id = 4 and content = the strings with the wooden side$ of the bow at t = 3.21s and piggybacking ACK number 2
+ - nodes[0] dropped duplicate message with id = 4 and content = the strings with the wooden side$ of the bow at t = 3.21
+ - nodes[0] received message with id = 0 and content = (col legno).  at t = 3.25s and piggybacking ACK number 2
+ - nodes[0] received message with id = 1 and content = It can also be played by plucking at t = 3.25s and piggybacking NACK number 2
+ - nodes[1] received message with id = -1 and content = NOPAYLOAD at t = 3.25s with modification, and piggybacking ACK number 3
+ ----------------------------------------
+ - nodes[1] end of input file
+ - total transmission time = 3.25
+ - total number of transmissions = 15
+ - the network throughput = 5.53846
+ - nodes[1] received message with id = -1 and content = NOPAYLOAD at t = 3.25s with modification, and piggybacking ACK number 4
+ ----------------------------------------
+ - nodes[1] end of input file
+ - total transmission time = 3.25
+ - total number of transmissions = 15
+ - the network throughput = 5.84615
+ - nodes[1] received message with id = 4 and content = usually by providing a mechanism for the union of sperm with eggs. at t = 3.4s and piggybacking ACK number 2
+ - nodes[0] received message with id = -1 and content = NOPAYLOAD at t = 3.4s with modification, and piggybacking ACK number 3
  ----------------------------------------
  - nodes[0] end of input file
- - total transmission time = 7.2
- - total number of transmissions = 8
- - the network throughput = 0.694444
+ - total transmission time = 3.4
+ - total number of transmissions = 10
+ - the network throughput = 2.35294
+ - nodes[0] received message with id = 2 and content = the strings$ with the fi.gers (pizzicato) at t = 3.45s with modification, and piggybacking ACK number 1
+ - nodes[1] received message with id = -1 and content = NOPAYLOAD at t = 3.45s with modification, and piggybacking NACK number 4
+ ----------------------------------------
+ - nodes[1] end of input file
+ - total transmission time = 3.45
+ - total number of transmissions = 15
+ - the network throughput = 6.37681

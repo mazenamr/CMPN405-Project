@@ -43,6 +43,7 @@
  *     char trailer;
  *     control piggybacking;
  *     int piggybackingId;
+ *     string hammingParity;
  * }
  * </pre>
  *
@@ -78,6 +79,7 @@ class NodeMessage_Base : public ::omnetpp::cPacket
     char trailer;
     control piggybacking;
     int piggybackingId;
+    ::omnetpp::opp_string hammingParity;
 
   private:
     void copy(const NodeMessage_Base& other);
@@ -92,12 +94,11 @@ class NodeMessage_Base : public ::omnetpp::cPacket
 
   public:
     virtual ~NodeMessage_Base();
+    NodeMessage_Base(const char *name=nullptr, short kind=0);
+    NodeMessage_Base(const NodeMessage_Base& other);
     virtual NodeMessage_Base *dup() const override {return new NodeMessage_Base(*this);}
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
-
-    NodeMessage_Base(const char *name=nullptr, short kind=0);
-    NodeMessage_Base(const NodeMessage_Base& other);
 
     // field getter/setter methods
     virtual messageHeader& getHeader();
@@ -112,6 +113,8 @@ class NodeMessage_Base : public ::omnetpp::cPacket
     virtual void setPiggybacking(const control& piggybacking);
     virtual int getPiggybackingId() const;
     virtual void setPiggybackingId(int piggybackingId);
+    virtual const char * getHammingParity() const;
+    virtual void setHammingParity(const char * hammingParity);
 };
 
 

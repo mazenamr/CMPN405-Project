@@ -207,6 +207,7 @@ void NodeMessage_Base::copy(const NodeMessage_Base& other)
     this->trailer = other.trailer;
     this->piggybacking = other.piggybacking;
     this->piggybackingId = other.piggybackingId;
+    this->hammingParity = other.hammingParity;
 }
 
 void NodeMessage_Base::parsimPack(omnetpp::cCommBuffer *b) const
@@ -217,6 +218,7 @@ void NodeMessage_Base::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->trailer);
     doParsimPacking(b,this->piggybacking);
     doParsimPacking(b,this->piggybackingId);
+    doParsimPacking(b,this->hammingParity);
 }
 
 void NodeMessage_Base::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -227,6 +229,7 @@ void NodeMessage_Base::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->trailer);
     doParsimUnpacking(b,this->piggybacking);
     doParsimUnpacking(b,this->piggybackingId);
+    doParsimUnpacking(b,this->hammingParity);
 }
 
 messageHeader& NodeMessage_Base::getHeader()
@@ -277,6 +280,16 @@ int NodeMessage_Base::getPiggybackingId() const
 void NodeMessage_Base::setPiggybackingId(int piggybackingId)
 {
     this->piggybackingId = piggybackingId;
+}
+
+const char * NodeMessage_Base::getHammingParity() const
+{
+    return this->hammingParity.c_str();
+}
+
+void NodeMessage_Base::setHammingParity(const char * hammingParity)
+{
+    this->hammingParity = hammingParity;
 }
 
 class NodeMessageDescriptor : public omnetpp::cClassDescriptor
@@ -345,7 +358,7 @@ const char *NodeMessageDescriptor::getProperty(const char *propertyname) const
 int NodeMessageDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 5+basedesc->getFieldCount() : 5;
+    return basedesc ? 6+basedesc->getFieldCount() : 6;
 }
 
 unsigned int NodeMessageDescriptor::getFieldTypeFlags(int field) const
@@ -362,8 +375,9 @@ unsigned int NodeMessageDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISCOMPOUND,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NodeMessageDescriptor::getFieldName(int field) const
@@ -380,8 +394,9 @@ const char *NodeMessageDescriptor::getFieldName(int field) const
         "trailer",
         "piggybacking",
         "piggybackingId",
+        "hammingParity",
     };
-    return (field>=0 && field<5) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<6) ? fieldNames[field] : nullptr;
 }
 
 int NodeMessageDescriptor::findField(const char *fieldName) const
@@ -393,6 +408,7 @@ int NodeMessageDescriptor::findField(const char *fieldName) const
     if (fieldName[0]=='t' && strcmp(fieldName, "trailer")==0) return base+2;
     if (fieldName[0]=='p' && strcmp(fieldName, "piggybacking")==0) return base+3;
     if (fieldName[0]=='p' && strcmp(fieldName, "piggybackingId")==0) return base+4;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hammingParity")==0) return base+5;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -410,8 +426,9 @@ const char *NodeMessageDescriptor::getFieldTypeString(int field) const
         "char",
         "control",
         "int",
+        "string",
     };
-    return (field>=0 && field<5) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **NodeMessageDescriptor::getFieldPropertyNames(int field) const
@@ -483,6 +500,7 @@ std::string NodeMessageDescriptor::getFieldValueAsString(void *object, int field
         case 2: return long2string(pp->getTrailer());
         case 3: {std::stringstream out; out << pp->getPiggybacking(); return out.str();}
         case 4: return long2string(pp->getPiggybackingId());
+        case 5: return oppstring2string(pp->getHammingParity());
         default: return "";
     }
 }
@@ -500,6 +518,7 @@ bool NodeMessageDescriptor::setFieldValueAsString(void *object, int field, int i
         case 1: pp->setPayload((value)); return true;
         case 2: pp->setTrailer(string2long(value)); return true;
         case 4: pp->setPiggybackingId(string2long(value)); return true;
+        case 5: pp->setHammingParity((value)); return true;
         default: return false;
     }
 }

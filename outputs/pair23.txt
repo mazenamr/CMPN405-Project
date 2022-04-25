@@ -1,0 +1,59 @@
+ - nodes[2] sends DUPLICATE message with id = 0 and content = $Sherlock Holmes is a fictional detective$ at t = 3.01s and piggybacking: ACK number 0
+ - nodes[2] sends DUPLICATE message with id = 1 and content = $created by British author/$ Sir Arthur Conan Doyle.$ at t = 3.06s and piggybacking: ACK number 0
+ - nodes[2] sends DUPLICATE message with id = 1 and content = $created by British author/$ Sir Arthur Conan Doyle.$ at t = 3.06s and piggybacking: ACK number 0
+ - nodes[3] received message with id = 0 and content = Sherlock Holmes is a fictional detective at t = 3s and piggybacking ACK number 0
+ - nodes[3] sends DUPLICATE message with id = 0 and content = $A cherry blossom is a flower of many trees of genus/$ Prunus or Prunus subg.$ at t = 3.31s and piggybacking: ACK number 1
+ - nodes[3] sends DUPLICATE message with id = 1 and content = $They are also known as Japanese cherry and Sakura$ at t = 3.36s and piggybacking: ACK number 1
+ - nodes[3] sends DUPLICATE message with id = 1 and content = $They are also known as Japanese cherry and Sakura$ at t = 3.36s and piggybacking: ACK number 1
+ - nodes[3] received message with id = 1 and content = created by British author$ Sir Arthur Conan Doyle. at t = 3.05s and piggybacking ACK number 0
+ - nodes[2] received message with id = -1 and content = NOPAYLOAD at t = 3.05s with modification, and piggybacking ACK number 2
+ - nodes[2] LOSS message with id = 2 and content = $Referring to himself as a// "consulting detective" in the stories,$ at t = 3.05s and piggybacking: NACK number 0
+ - nodes[2] sends DUPLICATE message with id = 2 and content = $Referring to himself as a// "consulting detective" in the stories,$ at t = 3.06s and piggybacking: NACK number 0
+ - nodes[2] sends DUPLICATE message with id = 3 and content = $Holmes is known for his proficiency with observation,$ at t = 3.11s and piggybacking: NACK number 0
+ - nodes[3] received message with id = 2 and content = Referring to himself as a/ "consulting detective" in the stories, at t = 3.05s and piggybacking NACK number 0
+ - nodes[2] received message with id = -1 and content = NOPAYLOAD at t = 3.05s with modification, and piggybacking ACK number 3
+ - nodes[2] sends DUPLICATE message with id = 4 and content = $deduction, forensic science,$ at t = 3.11s and piggybacking: NACK number 0
+ - nodes[3] received message with id = 1 and content = created by British author$ Sir Arthur Conan Doyle. at t = 3.06s and piggybacking ACK number 0
+ - nodes[3] dropped duplicate message with id = 1 and content = created by British author$ Sir Arthur Conan Doyle. at t = 3.06
+ - nodes[3] received message with id = 3 and content = Holmes is known for his proficiency with observation, at t = 3.1s and piggybacking NACK number 0
+ - nodes[3] received message with id = 4 and content = deduction, forensic science, at t = 3.1s and piggybacking NACK number 0
+ - nodes[2] received message with id = -1 and content = NOPAYLOAD at t = 3.1s with modification, and piggybacking ACK number 0
+ - nodes[2] sends DUPLICATE message with id = 0 and content = $and// logical reasoning/$ that borders on the fantastic,$ at t = 3.11s and piggybacking: NACK number 0
+ - nodes[2] LOSS message with id = 1 and content = $which he employs when investigating cases for a wide variety of clients,$ at t = 3.45s and piggybacking: NACK number 0
+ - nodes[2] sends DUPLICATE message with id = 1 and content = $which he employs when investigating cases for a wide variety of clients,$ at t = 3.46s and piggybacking: NACK number 0
+ - nodes[2] received message with id = -1 and content = NOPAYLOAD at t = 3.1s with modification, and piggybacking ACK number 1
+ ----------------------------------------
+ - nodes[2] end of input file
+ - total transmission time = 3.1
+ - total number of transmissions = 8
+ - the network throughput = 1.93548
+ - nodes[3] received message with id = 0 and content = and/ logical reasoning$ that borders on the fantastic, at t = 3.1s and piggybacking NACK number 0
+ - nodes[2] received message with id = -1 and content = NOPAYLOAD at t = 3.1s with modification, and piggybacking ACK number 2
+ ----------------------------------------
+ - nodes[2] end of input file
+ - total transmission time = 3.1
+ - total number of transmissions = 8
+ - the network throughput = 2.25806
+ - nodes[2] received message with id = 0 and content = A cherry blossom is a flower of many trees of genus$ Prunus or Prunus subg. at t = 3.3s and piggybacking ACK number 1
+ - nodes[3] received message with id = -1 and content = NOPAYLOAD at t = 3.3s with modification, and piggybacking ACK number 1
+ ----------------------------------------
+ - nodes[3] end of input file
+ - total transmission time = 3.3
+ - total number of transmissions = 3
+ - the network throughput = 0.30303
+ - nodes[2] received message with id = 1 and content = They are also known as Japanese cherry and Sakura at t = 3.35s and piggybacking ACK number 1
+ - nodes[3] received message with id = -1 and content = NOPAYLOAD at t = 3.35s with modification, and piggybacking ACK number 2
+ ----------------------------------------
+ - nodes[3] end of input file
+ - total transmission time = 3.35
+ - total number of transmissions = 3
+ - the network throughput = 0.597015
+ - nodes[2] received message with id = 1 and content = They are also known as Japanese cherry and Sakura at t = 3.36s and piggybacking ACK number 1
+ - nodes[2] dropped duplicate message with id = 1 and content = They are also known as Japanese cherry and Sakura at t = 3.36
+ - nodes[3] received message with id = 1 and content = which he employs when investigating cases for a wide variety of clients, at t = 3.45s and piggybacking NACK number 0
+ - nodes[2] received message with id = -1 and content = NOPAYLOAD at t = 3.45s with modification, and piggybacking ACK number 3
+ ----------------------------------------
+ - nodes[2] end of input file
+ - total transmission time = 3.45
+ - total number of transmissions = 8
+ - the network throughput = 3.76812

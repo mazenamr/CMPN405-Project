@@ -39,4 +39,5 @@ packet NodeMessage {
     char trailer;
     control piggybacking;
     int piggybackingId;
+    string hammingParity;
 }
